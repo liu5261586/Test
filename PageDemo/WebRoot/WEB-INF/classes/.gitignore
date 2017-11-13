@@ -1,0 +1,8 @@
+/applicationContext.xml
+/controller
+/dao
+/database.properties
+/mybatis-config.xml
+/pojo
+/service
+/springmvc-servlet.xml

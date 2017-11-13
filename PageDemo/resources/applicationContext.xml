@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+xmlns:tx="http://www.springframework.org/schema/tx" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-3.2.xsd 
+http://www.springframework.org/schema/aop 
+http://www.springframework.org/schema/aop/spring-aop-3.2.xsd 
+http://www.springframework.org/schema/context 
+http://www.springframework.org/schema/context/spring-context-3.2.xsd 
+http://www.springframework.org/schema/tx 
+http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
+	
+	<!-- 扫描 service包下的注解 -->
+	<context:component-scan base-package="service"></context:component-scan>
+
+	<!-- 读取配置文件 -->
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<!-- 指定配置文件的位置 -->
+		<property name="location">
+			<value>classpath:database.properties</value>
+		</property>
+	</bean>
+	
+	
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<!-- ${driver}提取的是外部配置文件的键值 -->	
+		<property name="driverClassName" value="${driver}"></property>
+		<property name="url" value="${url}"></property>
+		<property name="username" value="${username}"></property>
+		<property name="password" value="${password}"></property>
+	</bean>
+
+	
+	
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		
+		<!-- 直接引入mybatis的核心配置文件 -->
+		<property name="configLocation" value="classpath:mybatis-config.xml"></property>
+	</bean>
+	
+	
+	
+	<!-- 接口映射器    处理StudentMapper.java<->StudentMapper.xml -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="dao"></property>
+	</bean>
+
+	
+</beans>
